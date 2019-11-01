@@ -99,7 +99,9 @@ This code uses a very simple while -loop. The code deconstructs as follows:
 
 The last line of code (the "Sleep" -function) is added to conserve resources. Although this code is very light, I was at first confused as to why 100% of processor resources were being used and the RPi was considerably bogged down. Through some research and pondering I realised that the code was being run as many times in a second as the resources would allow because there was no break. By adding a 0.1-second break into the loop we force the code to run "only" about 10 times each second.
 
-[caption id="attachment_73751" align="alignleft" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/Nappi-toimii-300x142.png) The interface is working![/caption]
+![](https://www.verke.org/wp-content/uploads/2017/03/Nappi-toimii-300x142.png) 
+
+The interface is working![/caption]
 
 If everything went according to plan, when you run the code (select "run" in the editor or input the command _python buttontest.py_ in terminal) there should be a message "The button works!" when pressing the button. If using terminal, you must press ctrl+c simultaneously to interrupt the program.
 
