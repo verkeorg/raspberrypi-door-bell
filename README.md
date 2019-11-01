@@ -146,7 +146,7 @@ Koodin viimeinen lisäys pyrkii siihen, että RasPi ilmoittaisi siitä, jos ovik
 
 ## Viimeistelyä
 
-(https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) 
+![](https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) 
 
 Ovikello paikoillaan
 
