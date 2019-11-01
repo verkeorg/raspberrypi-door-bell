@@ -46,11 +46,15 @@ _<span style="font-family: monospace, monospace;">sudo pip install python-telegr
 
 ### Connecting the button with Raspberry Pi
 
-[caption id="attachment_73627" align="alignright" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/20170224_175748-01-300x225.jpeg) The test model of the doorbell without the power source.[/caption]
+[](https://www.verke.org/wp-content/uploads/2017/03/20170224_175748-01-300x225.jpeg)
+
+The test model of the doorbell without the power source.
 
 Although you could basically use a doorbell by just joining two exposed wires, I obviously wanted to install a button outside our door. In the button that was readily available there are two metal contacts that are closed by pressing the button. Install the connecting leads (preferrably short, 20-30cm ones) into the button by opening up the screws in the button and installing the stripped wire ends under the screws. Install the connectors into the other ends of the wires; with our selected RPi case there wasn't room for the plastic housings of the connectors, so I only used the inner metal pins by crimping them onto the leads.
 
-[caption id="attachment_73629" align="alignleft" width="169"]![](https://www.verke.org/wp-content/uploads/2017/03/20170223_120124-01-169x300.jpeg) Raspberry Pi's GPIO -connector and the connection diagram I printed online.[/caption]
+[](https://www.verke.org/wp-content/uploads/2017/03/20170223_120124-01-169x300.jpeg) 
+
+Raspberry Pi's GPIO -connector and the connection diagram I printed online.
 
 In Raspberry Pi all physical devices are generally connected to the GPIO interface ("General purpose in/out", pictured left). Every pin (the golden poles) on the interface has its own designation and purpose. To make things easier you might want to print out a diagram online, so you know which pins to use and avoid damaging your RPi. I used [this one](https://github.com/splitbrain/rpibplusleaf/blob/master/rpiblusleaf.pdf). **Whenever you are working with the connections, disconnect the power source to avoid any short-circuits. **(Obviously don't do this while your RPi is updating, though!)
 
@@ -64,15 +68,25 @@ To make the RPi react to the user pressing the button, we need some clever progr
 
 First you want to start by a few very simple lines of code so you can test whether the physical connection to the button is working. This can be done with the following code (which is explained below):
 
-`# Import the required libraries import RPi.GPIO as GPIO from time import sleep`
+```python
+# Import the required libraries
+import RPi.GPIO as GPIO from time import sleep
 
-`# Define GPIO -pins as standard GPIO.setmode(GPIO.BCM)`
+# Define GPIO -pins as standard
+GPIO.setmode(GPIO.BCM)
 
-`# Define pin 18 as input and enable internal resistors GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)`
+# Define pin 18 as input and enable internal resistors 
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-`# function for button press while True: input_state = GPIO.input(18) if input_state == False: print ("The button works!")`
+# function for button press 
+while True: input_state = GPIO.input(18) if input_state == False: print ("The button works!")
 
-`# 0.1 second break to conserve processor resources sleep(0.1)` All the lines starting with # are comments. With comments a line of code is ignored when running the code, and it can (and should) be used to explain what each segment of code does. The following is happening in the code above:
+# 0.1 second break to conserve processor resources 
+sleep(0.1) 
+finally: 
+```
+
+All the lines starting with # are comments. With comments a line of code is ignored when running the code, and it can (and should) be used to explain what each segment of code does. The following is happening in the code above:
 
 First we define libraries to be imported. Libraries are collections of pre-written code that can be used to avoid having to code all of the commonly used functions for each program separately. Here we have imported the library controlling the GPIO interface (and given it the "nickname" GPIO to make coding easier). We have also imported the function "sleep" from the library "time". The GPIO interface must be defined so the program understands what sort of devices we are connecting. Here we have defined it as "standard" since we don't need anything exotic and we want it to match our printout of the connections. The next line defines that we will be connecting the doorbell to the pin 18, ie. the RPi will check this pin for an incoming signal. An internal resistor needs to be enabled because the signal is read according to the strength of the signal between pins 18 and ground; the resistor is meant to make the signal more clear. Basically, because the circuit is so simple, the value would fluctuate continuously between 0 and 1, and the doorbell would constantly ring on its own. This resistor could also be replaced by a physical resistor installed on the connecting leads,  but this seemed unnecessary.
 
@@ -99,7 +113,32 @@ The bot is created directly in Telegram. Open up a conversation with the bot @bo
 
 ### Programming the doorbell
 
-Now we are ready to start programming the doorbell. Find an audio sample you want to use in your doorbell and download it to the RPi. Then write the following code in a new file called doorbell.py: `# -*- coding: utf-8 -*- # Input-output and time function for delay, audio library and system commands import RPi.GPIO as GPIO from time import sleep from os import system from pygame import mixer import logging` `# import libraries for telegram and define bot import telegram bot = telegram.Bot(token='**XXXXXXXXX-YOUR-TOKEN-GOES-HERE**')` `# Define GPIO-pins as standard GPIO.setmode(GPIO.BCM)` `# Define pin 18 as input and enable internal resistors GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)` `# function for button press with try/finally -loop` `try: while True: input_state = GPIO.input(18) if input_state == False: bot.sendMessage(chat_id=**-YOUR_CHAT_ID**, text="Someone is at the door!")` `mixer.init() mixer.music.load("Sounds/**YOUR_DOORBELL_SOUND**.wav") mixer.music.play() while mixer.music.get_busy() == True: continue` `sleep(1.0)` `# 0.1 second break to conserve resources sleep(0.1)` `finally: # Reset state of button and send message if the program has an error bot.sendMessage(chat_id=**-YOUR_CHAT_ID**, text="The doorbell is offline!") GPIO.cleanup()`
+Now we are ready to start programming the doorbell. Find an audio sample you want to use in your doorbell and download it to the RPi. Then write the following code in a new file called doorbell.py: 
+
+```python
+# Input-output and time function for delay, audio library and system commands 
+import RPi.GPIO as GPIO from time import sleep from os import system from pygame import mixer import logging
+
+# import libraries for telegram and define bot 
+import telegram bot = telegram.Bot(token='**XXXXXXXXX-YOUR-TOKEN-GOES-HERE**')
+
+# Define GPIO-pins as standard 
+GPIO.setmode(GPIO.BCM) 
+
+# Define pin 18 as input and enable internal resistors 
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# function for button press with try/finally -loop
+try: while True: input_state = GPIO.input(18) if input_state == False: bot.sendMessage(chat_id=**-YOUR_CHAT_ID**, text="Someone is at the door!")` `mixer.init() mixer.music.load("Sounds/**YOUR_DOORBELL_SOUND**.wav") mixer.music.play() while mixer.music.get_busy() == True: continue` `sleep(1.0)
+
+# 0.1 second break to conserve resources 
+sleep(0.1)
+finally: 
+
+# Reset state of button and send message if the program has an error 
+bot.sendMessage(chat_id=**-YOUR_CHAT_ID**, text="The doorbell is offline!") GPIO.cleanup()
+
+```
 
 A few notes of the code above: There are more libraries imported than in the first example. The library "mixer" (a part of the library "pygame") is needed to play sounds. System, logging and telegram -libraries are needed for the Telegram -bot to work. If the python-telegram-bot -program has not been installed, the code will halt when trying to run the telegram part of the code.
 
@@ -117,7 +156,9 @@ The final addition tries to achieve some error-proofing by adding the option of 
 
 ## Final touches
 
-[caption id="attachment_73626" align="alignright" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) Ovikello paikoillaan[/caption]
+![](https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) 
+
+Ovikello paikoillaan[/caption]
 
 When everything is installed in their final positions (longer cables insulated and installed, button installed outside the door, proper location for the RPi etc.) you might want to install a case on your RPi. Take care in routing the cables outside the case so they don't get squeezed and damaged. Because it is hard to move the RPi when the connecting leads are installed, I have thought about routing the connectors outside the case to make the connectors easier to remove when needed.
 
