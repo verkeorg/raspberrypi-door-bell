@@ -27,9 +27,9 @@ Ketjuksi muodostuu siis jotakuinkin **Painike** **->** **RasPi -> Koodi -> Kai
 Asenna RasPiin mukana tullut muistikortti RasPin ohjeiden mukaisesti. Kytke näyttö hdmi-kaapelilla, usb-näppäimistö ja -hiiri sekä viimeisenä virtalähde. RasPi käynnistyy automaattisesti työpöydälle. Mikäli Linux -pohjaiset käyttöjärjestelmät eivät ole tuttuja, saattaa RasPin mukana toimitettavan RaspBian -käyttöjärjestelmän työpöytä näyttää hieman oudolta, mutta vasemman ylänurkan valikosta löytyvät melkolailla tutuilta paikoiltaan samanlaiset asetukset kuin muistakin käyttöjärjestelmistä. Jos et käytä verkkokaapelia, kytke RasPi langattomaan verkkoon.
 
 Monet Linux -pohjaisen käyttöjärjestelmän toimenpiteet on näppärintä hoitaa tekstipohjaisen komentorivin eli _t__erminaalin_ kautta. Aivan kaikkea ei graafisilla työkaluilla pysty edes tekemään. RasPin mukana toimitettu käyttöjärjestelmä on todennäköisesti vanhentunut, joten käyttöjärjestelmän päivitys on hyvää harjoitusta terminaalin käytölle. Terminaalia käytetään kirjoittamalla komento ja hyväksymällä se rivinvaihdolla (enter). Avaa terminaali ja kirjoita seuraavat komennot:
-
-_`sudo apt-get update sudo apt-get dist-upgrade`_
-
+```
+sudo apt-get update sudo apt-get dist-upgrade
+```
 Ensimmäinen komento päivittää koneelle listan paketeista (ohjelmista) joita on saatavilla, jälkimmäinen päivittää saatavilla olevat päivitetyt paketit. Komentojen rakenne on seuraava:
 
 *   _sudo_ on lyhenne sanoista "superuser" ja "do", eli komento suoritetaan järjestelmänvalvojan oikeuksilla. Mikäli RasPi kysyy käyttäjätunnuksia ja / tai salasanaa, RasPin perustunnukset ovat pi / raspberry.
@@ -38,7 +38,9 @@ Ensimmäinen komento päivittää koneelle listan paketeista (ohjelmista) joita 
 
 Päivittämisessä kestää todennäköisesti jonkin aikaa, joten odottele rauhassa tai valmistele sillä aikaa nappi johtoineen. Kun päivitys on valmis, kannattaa samalla noutaa [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) jota tarvitaan jotta saadaan ovikello huutelemaan telegramiin.
 
-_<span style="font-family: monospace, monospace;">sudo pip install python-telegram-bot --upgrade</span>_
+``` 
+sudo pip install python-telegram-bot --upgrade
+```
 
 ### Napin liittäminen Raspberry Pihin
 
@@ -155,21 +157,21 @@ Kun kaikki on asennettu lopullisille paikoilleen (pidemmät kaapelit suojattu ja
 Siltä varalta, että RasPi jostain syystä käynnistyy uudelleen tai menettää hetkellisesti verkkovirran, kannattaa edellä luotu koodinpätkä virittää käynnistymään automaattisesti RasPin käynnistyessä. Se onnistuu [täältä](http://raspberrypi.stackexchange.com/questions/4123/running-a-python-script-at-startup) löytyviä ohjeita soveltamalla:
 
 Terminaalissa luo uusi tiedosto nimeltä Ovikello.desktop kansioon /home/pi/.config/autostart/ .
-
-    cd /home/pi/.config/autostart/
-
+```
+cd /home/pi/.config/autostart/
+```
 Kirjoita avautuvassa editorissa tiedostolle seuraava sisältö:
-
-    [Desktop Entry]
-    Encoding=UTF-8
-    Type=Application
-    Name=Ovikello
-    Comment=Tämä käynnistää ovikellon automaattisesti RasPin käynnistyessä
-    Exec=  python /home/pi/Ovikello.py
-    StartupNotify=false
-    Terminal=true
-    Hidden=false
-
+```
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Ovikello
+Comment=Tämä käynnistää ovikellon automaattisesti RasPin käynnistyessä
+Exec=  python /home/pi/Ovikello.py
+StartupNotify=false
+Terminal=true
+Hidden=false
+```
 Tallenna tiedosto painamalla ctrl-x (poistu) ja vastaamalla myöntävästi kysymykseen tallennetaanko tiedosto. Nyt ovikellon "ohjausohjelman" pitäisi käynnistyä automaattisesti RasPin käynnistyessä.
 
 **Tällä hetkellä oman ovikellon koodissa on vielä yksi vakava puute:** Ovikello ei siedä lainkaan sitä, että RasPi jostain syystä hukkaa verkkoyhteyden. On täysin ymmärrettävää, että Telegram -viestit eivät kulje perille ilman verkkoyhteyttä, mutta jostain syystä myöskään äänet eivät ilman nettiä toistu. Koodiin pitänee rakentaa jonkinlainen vikasieto myös tätä tilannetta varten, tyyppiä "yritä 10 sekuntia postata telegramiin, jos epäonnistuu, palaa alkuun". Äänet voisi myös virittää toistumaan ennen telegram -yhteyttä.
