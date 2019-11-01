@@ -34,7 +34,11 @@ Install the memory card containing the operating system included with the RPi ac
 
 <span style="color: black;">Many tasks in Linux operating systems are best handled via a command prompt called _terminal_. Some tasks can't even be done via the graphic user interface. Most likely the operating system needs an upgrade, so you can practise using the terminal by updating your OS. The terminal is used by writing commands and running them by pressing the enter key. Open up Terminal and write the following commands:</span>
 
-_`sudo apt-get update sudo apt-get dist-upgrade`_ The first command above updates the list of packages (programs) available and the second one updates all the packages that are available. The structure is as follows:
+```
+sudo apt-get update sudo apt-get dist-upgrade
+```
+
+The first command above updates the list of packages (programs) available and the second one updates all the packages that are available. The structure is as follows:
 
 *   _sudo_ is an abbreviation of "superuser" and "do". This means that the following command will be run with administrator rights. If the RasPi asks for a password, the default credentials are pi / raspberry.
 *   _apt-get_ is the program that is used in Linux to get packages, libraries and programs from online repositories
@@ -42,7 +46,9 @@ _`sudo apt-get update sudo apt-get dist-upgrade`_ The first command above update
 
 The update will take a while, so wait patiently or prepare the button with the connecting leads while you wait. Once the update is complete, you might want to install [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot) that is needed to get the doorbell talking to Telegram.
 
-_<span style="font-family: monospace, monospace;">sudo pip install python-telegram-bot --upgrade</span>_
+```
+sudo pip install python-telegram-bot --upgrade
+```
 
 ### Connecting the button with Raspberry Pi
 
@@ -79,11 +85,7 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # function for button press 
-while True: input_state = GPIO.input(18) if input_state == False: print ("The button works!")
-
-# 0.1 second break to conserve processor resources 
-sleep(0.1) 
-finally: 
+while True: input_state = GPIO.input(18) if input_state == False: print ("The button works!") 
 ```
 
 All the lines starting with # are comments. With comments a line of code is ignored when running the code, and it can (and should) be used to explain what each segment of code does. The following is happening in the code above:
@@ -101,7 +103,7 @@ The last line of code (the "Sleep" -function) is added to conserve resources. Al
 
 ![](https://www.verke.org/wp-content/uploads/2017/03/Nappi-toimii-300x142.png) 
 
-The interface is working![/caption]
+The interface is working!
 
 If everything went according to plan, when you run the code (select "run" in the editor or input the command _python buttontest.py_ in terminal) there should be a message "The button works!" when pressing the button. If using terminal, you must press ctrl+c simultaneously to interrupt the program.
 
@@ -160,18 +162,18 @@ The final addition tries to achieve some error-proofing by adding the option of 
 
 ![](https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) 
 
-Ovikello paikoillaan[/caption]
+Ovikello paikoillaan
 
 When everything is installed in their final positions (longer cables insulated and installed, button installed outside the door, proper location for the RPi etc.) you might want to install a case on your RPi. Take care in routing the cables outside the case so they don't get squeezed and damaged. Because it is hard to move the RPi when the connecting leads are installed, I have thought about routing the connectors outside the case to make the connectors easier to remove when needed.
 
 To make the RPi more resistant to random reboots or intermediate loss of power, you might want to make the previously created code run when the RPi boots up. You can do this by applying the [following instructions](http://raspberrypi.stackexchange.com/questions/4123/running-a-python-script-at-startup):
 
 Use Terminal to create a new file called doorbell.desktop in the folder /home/pi/.config/autostart/ .
-
+```
     cd /home/pi/.config/autostart/
-
+```
 Write the following lines into the file in the nano editor that opens:
-
+```
     [Desktop Entry]
     Encoding=UTF-8
     Type=Application
@@ -181,7 +183,7 @@ Write the following lines into the file in the nano editor that opens:
     StartupNotify=false
     Terminal=true
     Hidden=false
-
+```
 Save the file by pressing ctrl+x (exit) and answering yes to the question whether to save the file. Now the program should be automatically run whenever you reboot your RPi.
 
 **There is one serious flaw in the current code: **the doorbell has zero tolerance on the loss of network connectivity. It is understandable that telegram messages are not sent when there is no network connection; however, for some reason the sounds aren't played either. Supposedly there should be some form of failsafe in the code, something like "Try to post to Telegram for 10 seconds, then return to beginning".
