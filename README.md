@@ -64,15 +64,21 @@ Jotta RasPi saadaan reagoimaan napinpainallukseen, tarvitaan hieman ohjelmointia
 
 Ensin kannattaa kirjoittaa mahdollisimman yksinkertainen koodi, jolla pystyy testaamaan toimiiko napin fyysinen kytkentä RasPiin. Tämän voi tehdä esimerkiksi seuraavalla koodinpätkällä (selitysosa koodin jälkeen):
 
-`# Tuodaan tarvittavat Python -kirjastot import RPi.GPIO as GPIO from time import sleep`
+```python
+# Tuodaan tarvittavat Python -kirjastot 
+import RPi.GPIO as GPIO from time import sleep
 
-`# Määritellään GPIO -pinnit standardiksi GPIO.setmode(GPIO.BCM)`
+# Määritellään GPIO -pinnit standardiksi 
+GPIO.setmode(GPIO.BCM)
 
-`# Määritellään pin 18 sisääntuloksi ja kytketään sisäinen vastus GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)`
+# Määritellään pin 18 sisääntuloksi ja kytketään sisäinen vastus 
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-`# napinpainalluksen funktio while True: input_state = GPIO.input(18) if input_state == False: print ("Nappi toimii!")`
+# napinpainalluksen funktio 
+while True: input_state = GPIO.input(18) if input_state == False: print ("Nappi toimii!")
+```
 
-`# 0.1 sekunnin tauko jotta säästetään prosessorin resursseja sleep(0.1)` Kaikki rivit jotka alkavat risuaita -merkillä ovat kommentteja. Kommenteilla voidaan poistaa rivi koodia tilapäisesti käytöstä tai kuten yllä, selittää mitä mikäkin koodirivi tekee. Ylläolevassa koodissa tapahtuu seuraavaa:
+Kaikki rivit jotka alkavat risuaita -merkillä ovat kommentteja. Kommenteilla voidaan poistaa rivi koodia tilapäisesti käytöstä tai kuten yllä, selittää mitä mikäkin koodirivi tekee. Ylläolevassa koodissa tapahtuu seuraavaa:
 
 Ensin määritellään koodiin tuotavat kirjastot. Kirjastot ovat ikäänkuin valmiita koodinpätkiä ja kirjastojen käytöllä vältytään ohjelmoimasta yleisiä toimintoja uudelleen. Ylläolevassa on tuotu GPIO -liitännän ohjaamiseen tarvittava kirjasto (ja annettu sille lyhyempi "lempinimi" GPIO) sekä tuotu time -kirjastosta osio "sleep", jolla saadaan koodiin tauko. GPIO -liitäntä tulee määritellä, jotta RasPi ymmärtää, minkätyyppisiä asioita liitäntään on kytketty. Tässä GPIO on määritelty standardimuotoon, jolloin se noudattaa aiemmin printtaamaamme kytkentöjen järjestystä. Seuraavassa määritellään, että nastasta 18 (johon kytkimme ovikellon napin, tämä voisi olla mikä tahansa liittimistä) haistellaan sisääntulevaa signaalia. Lisäksi määrittelemme, että nastassa käytetään sisäistä vastusta; koska RasPi tutkailee nastan 18 ja maa (GND) välisen signaalin voimakkuutta, vastus auttaa selkiyttämään mittaustulosta. Yksinkertaistettuna, koska olen yksinkertainen: ilman vastusta signaali olisi koko ajan jotain epämääräistä väliltä 0-1, jolloin napin tilaa (pohjassa vai ei) ei voida luotettavasti lukea ja ovikello soisi jatkuvasti omia aikojaan. Samaan tulokseen päästäisiin asentamalla fyysinen vastus johtoon, mutta se on käytännössä tässä tarpeetonta.
 
@@ -101,7 +107,28 @@ Telegram -botti luodaan suoraan telegramissa. Avaa keskustelu @botfather -botill
 
 ### Ovikellon ohjelmointi
 
-Nyt voidaan siirtyä ovikellon varsinaiseen ohjelmointiin. Etsi verkosta haluamasi ovikellon ääni ja lataa tiedosto valmiiksi RasPille. Sen jälkeen kirjoita seuraava koodi esimerkiksi tiedostoon Ovikello.py: `# -*- coding: utf-8 -*- # I/O sekä aikafunktio viiveelle, äänikirjasto ja systeemikomennot import RPi.GPIO as GPIO from time import sleep from os import system from pygame import mixer import logging` logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)$ `import telegram bot = telegram.Bot(token='**XXXXXXXXX-SINUN-BOTTISI-TOKEN**')` `# GPIO -pinnien määrittely standardiksi GPIO.setmode(GPIO.BCM)` `# Määritellään pinni 18 sisääntuloksi sekä kytketään sisäinen vastus GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)` `# napinpainalluksen funktio try / finally -loopilla` `try: while True: input_state = GPIO.input(18) if input_state == False: bot.sendMessage(chat_id=**-XXXXXXXX**, text="Ovella on joku!")` `mixer.init() mixer.music.load("Sounds/ovikello.wav") mixer.music.play() while mixer.music.get_busy() == True: continue` `sleep(1.0)` `# 0.1 sekunnin tauko jotta säästetään prosessorin resursseja sleep(0.1)` `finally: # Resetoidaan napin tila ja lähetetään viesti jos ovikello hyytyy bot.sendMessage(chat_id=**-XXXXXXXX**, text="Ovikello on pois päältä!") GPIO.cleanup()`
+Nyt voidaan siirtyä ovikellon varsinaiseen ohjelmointiin. Etsi verkosta haluamasi ovikellon ääni ja lataa tiedosto valmiiksi RasPille. Sen jälkeen kirjoita seuraava koodi esimerkiksi tiedostoon Ovikello.py: 
+```python
+# I/O sekä aikafunktio viiveelle, äänikirjasto ja systeemikomennot 
+import RPi.GPIO as GPIO from time import sleep from os import system from pygame import mixer import logging` logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)$ `import telegram bot = telegram.Bot(token='**XXXXXXXXX-SINUN-BOTTISI-TOKEN**')
+
+# GPIO -pinnien määrittely standardiksi 
+GPIO.setmode(GPIO.BCM)
+
+# Määritellään pinni 18 sisääntuloksi sekä kytketään sisäinen vastus 
+GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# napinpainalluksen funktio try / finally -loopilla` 
+`try: while True: input_state = GPIO.input(18) if input_state == False: bot.sendMessage(chat_id=**-XXXXXXXX**, text="Ovella on joku!")` `mixer.init() mixer.music.load("Sounds/ovikello.wav") mixer.music.play() while mixer.music.get_busy() == True: continue` `sleep(1.0)
+
+# 0.1 sekunnin tauko jotta säästetään prosessorin resursseja 
+sleep(0.1)
+finally: 
+
+# Resetoidaan napin tila ja lähetetään viesti jos ovikello hyytyy 
+bot.sendMessage(chat_id=**-XXXXXXXX**, text="Ovikello on pois päältä!") GPIO.cleanup()
+
+```
 
 Ylläolevasta koodista muutamia huomioita: Koodiin mukaan tuotavien kirjastojen määrä on ensimmäisestä esimerkistä kasvanut. Kirjastoa mixer (joka on osa "pygame" -kirjastoa) tarvitaan äänen toistamiseen ovikellon kaiuttimista. System, logging sekä telegram -kirjastoja taas tarvitaan telegram -botin käskyttämiseen. Mikäli python-telegram-bot -sovellusta ei ole tämän ohjeen ensimmäisessä vaiheessa asennettu, pysähtyy koodin ajaminen ensimmäiseen yritykseen ajaa telegram -kirjaston koodia.
 
