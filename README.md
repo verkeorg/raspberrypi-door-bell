@@ -42,11 +42,15 @@ _<span style="font-family: monospace, monospace;">sudo pip install python-telegr
 
 ### Napin liittäminen Raspberry Pihin
 
-[caption id="attachment_73627" align="alignright" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/20170224_175748-01-300x225.jpeg) Ovikellon testipaketti kasassa ilman virtalähdettä.[/caption]
+![](https://www.verke.org/wp-content/uploads/2017/03/20170224_175748-01-300x225.jpeg) 
+
+Ovikellon testipaketti kasassa ilman virtalähdettä.
 
 Vaikka ovikello periaatteessa toimisi vain johdon päät yhdistämällä, otettiin tämän projektin lähtökohdaksi napin asentaminen ovelle. Saatavilla olleessa napissa on kaksi kontaktia, jotka napinpainallus sulkee. Asenna kytkentäjohdot (lyhyillä 20-30 sentin pätkillä lienee helpompi testata) ovikelloon avaamalla ruuvit ja asentamalla kuoritut johdon päät ruuvinkantojen alle. Toiseen päähän johtoa kannattaa asentaa [Harwin -liittimet](http://www.partco.fi/fi/liittimet/piikkirima-liittimet/harwin-liittimet/15756-harwin-1x1.html); koska ostamiemme liittimien muovikuori ei mahdu RasPin kuoren alle, käytin pelkästään metallista sisäpinniä jonka puristin pihdeillä kiinni liitäntäjohtoon.
 
-[caption id="attachment_73629" align="alignleft" width="169"]![](https://www.verke.org/wp-content/uploads/2017/03/20170223_120124-01-169x300.jpeg) Raspberry Pi:n GPIO -liitin ja verkosta tulostettu kytkentäopas.[/caption]
+![](https://www.verke.org/wp-content/uploads/2017/03/20170223_120124-01-169x300.jpeg) 
+
+Raspberry Pi:n GPIO -liitin ja verkosta tulostettu kytkentäopas.
 
 Raspberry Pissä fyysiset laitteet kytketään pääsääntöisesti GPIO -liitäntään ("General purpose in/out", kuvassa). Liittimen kaikilla pinneillä (kultaiset liitännät) on oma tarkoituksensa ja toiminnallisuutensa. Kytkentää helpottamaan kannattaa tulostaa verkosta kytkentäkaavio, joka kertoo mitä mikäkin liitin tekee. Omani tulostin [täältä](https://github.com/splitbrain/rpibplusleaf/blob/master/rpiblusleaf.pdf). Kytkennät tehdään oikosulkujen välttämiseksi RasPin ollessa irti verkkovirrasta.
 
@@ -81,7 +85,9 @@ Tässä oleva esimerkkikoodi napin testaukseen käyttää yksinkertaisinta while
 
 Viimeinen rivi koodista ("Sleep" -toiminto) säästää prosessorin kuormaa. Vaikka kirjoittamamme koodi ei ole kovin raskas, kuormitti ensimmäinen testiversio koodista prosessorin 100% ja hyydytti RasPin kokonaan. Pieni tutkimustyö ja päättely osoitti, että koodia ajettiin niin monta kertaa kuin resurssit antoivat myöten, koska taukoa ei oltu määritelty. Lisäämällä 0.1 sekunnin tauko koodiin prosessorikuorma putosi merkittävästi.
 
-[caption id="attachment_73751" align="alignleft" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/Nappi-toimii-300x142.png) Kytkennät kunnossa![/caption]
+![](https://www.verke.org/wp-content/uploads/2017/03/Nappi-toimii-300x142.png) 
+
+Kytkennät kunnossa!
 
 Mikäli kaikki meni putkeen, pitäisi koodia ajettaessa (Python -editorista valinta "run" tai vaihtoehtoisesti teminaalin puolella komento _python nappitesti.py _) tulostua ruudulle nappia painettaessa teksti "Nappi toimii!". Terminaalissa koodin ajamisen saa keskeytettyä näppäinyhdistelmällä ctrl-c.
 
@@ -113,7 +119,9 @@ Koodin viimeinen lisäys pyrkii siihen, että RasPi ilmoittaisi siitä, jos ovik
 
 ## Viimeistelyä
 
-[caption id="attachment_73626" align="alignright" width="300"]![](https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) Ovikello paikoillaan[/caption]
+(https://www.verke.org/wp-content/uploads/2017/03/20170227_184154-01-300x300.jpeg) 
+
+Ovikello paikoillaan
 
 Kun kaikki on asennettu lopullisille paikoilleen (pidemmät kaapelit suojattu ja vedetty ovenpieleen asti, RasPille löytynyt sopiva paikka jne.) kannattaa RasPi koteloida. Kuten edellä todettu, Harwin -liittimet eivät mahdu koteloon kuorineen, mutta ainakin [tällä kotelolla](http://www.partco.fi/fi/minitietokoneet/raspberry-pi/17496-raspberry-k3.html) kansi mahtuu sulkeutumaan ongelmitta pelkkiä pinnejä käytettäessä. Johdot kannattaa vetää ulos sopivasta välistä huomioiden, etteivät ne joudu puristuksiin. Koska RasPia on hankala siirtää johdoissa, omaan ovikelloon olisi tarkoitus rakentaa kylkeen liitin, jolla napin johdotuksesta saa irroitettavan. Ajatuksena on käyttää [hyppylankoja](http://www.partco.fi/fi/protoilu/hyppylangat/16050-jmp-nn25-sin.html) sekä [liitinrimaa](http://www.partco.fi/fi/liittimet/piikkirima-liittimet/piikkirimat-tuumarasterilla/2616-pr-2x50-u-r105.html), jolla saa nastat tuotua kotelon ulkopuolelle. Kytkentä on toki muuten sama. Jää nähtäväksi, kuinka siistin liittimen saa toteutettua puukottamalla reiän koteloon ja liimaamalla piikkiriman pätkän paikoilleen..
 
