@@ -1,4 +1,4 @@
-# Rasperry Pi doorbell
+# Raspberry Pi doorbell
 
 Since Verke moved into a new office space we didn't have a doorbell at all. Although going to the local electronics store would have been easier, I opted to utilise the [Raspberry Pi -computer](https://en.wikipedia.org/wiki/Raspberry_Pi) bought for trying out projects. How did it turn out in absence of prior experience?
 
