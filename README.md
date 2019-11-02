@@ -1,4 +1,6 @@
-# Rasperry Pi ovikello
+# Rasperry Pi ovikello || Raspberry Pi Doorbell
+
+**Read the instruction in [Eglish](https://github.com/verkeorg/raspberrypi-doorbell/blob/master/README_EN.md).**
 
 ### Mitä projektiin tarvitaan?
 
